@@ -190,6 +190,28 @@ public class PalindromeCheckerApp {
         }
     }
 
+    public static boolean recursiveCheck(String word, int start, int end) {
+        if (start >= end) {
+            return true;
+        }
+
+        if (word.charAt(start) != word.charAt(end)) {
+            return false;
+        }
+
+        return recursiveCheck(word, start + 1, end - 1);
+    }
+
+    public static void checkPalindromeRecursive(String word) {
+        boolean isPalindrome = recursiveCheck(word, 0, word.length() - 1);
+
+        if (isPalindrome) {
+            System.out.println(word + " is a Palindrome (Recursion)");
+        } else {
+            System.out.println(word + " is not a Palindrome (Recursion)");
+        }
+    }
+
     public static void main(String[] args) {
         String word = "madam";
 
@@ -200,6 +222,7 @@ public class PalindromeCheckerApp {
         checkPalindromeQueueStack(word);
         checkPalindromeDeque(word);
         checkPalindromeLinkedList(word);
+        checkPalindromeRecursive(word);
     }
 }
 ```
