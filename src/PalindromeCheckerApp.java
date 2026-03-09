@@ -1,14 +1,29 @@
+```java
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Stack;
 
-interface PalindromeStrategy {
-    boolean checkPalindrome(String word);
-}
+public class UseCase13PalindromeCheckerApp {
 
-class StackStrategy implements PalindromeStrategy {
+    public static boolean checkBruteForce(String word) {
+        int length = word.length();
+        for (int i = 0; i < length / 2; i++) {
+            if (word.charAt(i) != word.charAt(length - 1 - i)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-    public boolean checkPalindrome(String word) {
+    public static boolean checkReverse(String word) {
+        String reversed = "";
+        for (int i = word.length() - 1; i >= 0; i--) {
+            reversed = reversed + word.charAt(i);
+        }
+        return word.equals(reversed);
+    }
+
+    public static boolean checkStack(String word) {
         Stack<Character> stack = new Stack<>();
 
         for (char c : word.toCharArray()) {
@@ -22,11 +37,8 @@ class StackStrategy implements PalindromeStrategy {
 
         return word.equals(reversed);
     }
-}
 
-class DequeStrategy implements PalindromeStrategy {
-
-    public boolean checkPalindrome(String word) {
+    public static boolean checkDeque(String word) {
         Deque<Character> deque = new ArrayDeque<>();
 
         for (char c : word.toCharArray()) {
@@ -41,43 +53,34 @@ class DequeStrategy implements PalindromeStrategy {
 
         return true;
     }
-}
-
-class PalindromeChecker {
-
-    private PalindromeStrategy strategy;
-
-    public PalindromeChecker(PalindromeStrategy strategy) {
-        this.strategy = strategy;
-    }
-
-    public boolean check(String word) {
-        return strategy.checkPalindrome(word);
-    }
-}
-
-public class UseCase12PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
         String word = "madam";
 
-        PalindromeChecker checker1 = new PalindromeChecker(new StackStrategy());
-        boolean result1 = checker1.check(word);
+        long start1 = System.nanoTime();
+        boolean r1 = checkBruteForce(word);
+        long end1 = System.nanoTime();
+        System.out.println("Brute Force Result: " + r1);
+        System.out.println("Brute Force Time: " + (end1 - start1) + " ns");
 
-        if (result1) {
-            System.out.println(word + " is a Palindrome (Stack Strategy)");
-        } else {
-            System.out.println(word + " is not a Palindrome (Stack Strategy)");
-        }
+        long start2 = System.nanoTime();
+        boolean r2 = checkReverse(word);
+        long end2 = System.nanoTime();
+        System.out.println("Reverse Result: " + r2);
+        System.out.println("Reverse Time: " + (end2 - start2) + " ns");
 
-        PalindromeChecker checker2 = new PalindromeChecker(new DequeStrategy());
-        boolean result2 = checker2.check(word);
+        long start3 = System.nanoTime();
+        boolean r3 = checkStack(word);
+        long end3 = System.nanoTime();
+        System.out.println("Stack Result: " + r3);
+        System.out.println("Stack Time: " + (end3 - start3) + " ns");
 
-        if (result2) {
-            System.out.println(word + " is a Palindrome (Deque Strategy)");
-        } else {
-            System.out.println(word + " is not a Palindrome (Deque Strategy)");
-        }
+        long start4 = System.nanoTime();
+        boolean r4 = checkDeque(word);
+        long end4 = System.nanoTime();
+        System.out.println("Deque Result: " + r4);
+        System.out.println("Deque Time: " + (end4 - start4) + " ns");
     }
 }
+```
