@@ -212,8 +212,29 @@ public class PalindromeCheckerApp {
         }
     }
 
+    public static void checkPalindromeIgnoreCaseSpace(String word) {
+        String normalized = word.replaceAll("\\s+", "").toLowerCase();
+
+        boolean isPalindrome = true;
+        int length = normalized.length();
+
+        for (int i = 0; i < length / 2; i++) {
+            if (normalized.charAt(i) != normalized.charAt(length - 1 - i)) {
+                isPalindrome = false;
+                break;
+            }
+        }
+
+        if (isPalindrome) {
+            System.out.println(word + " is a Palindrome (Case-Insensitive & Space-Ignored)");
+        } else {
+            System.out.println(word + " is not a Palindrome (Case-Insensitive & Space-Ignored)");
+        }
+    }
+
     public static void main(String[] args) {
         String word = "madam";
+        String phrase = "A man a plan a canal Panama";
 
         checkPalindromeBruteForce(word);
         checkPalindromeByReverse(word);
@@ -223,6 +244,7 @@ public class PalindromeCheckerApp {
         checkPalindromeDeque(word);
         checkPalindromeLinkedList(word);
         checkPalindromeRecursive(word);
+        checkPalindromeIgnoreCaseSpace(phrase);
     }
 }
 ```
