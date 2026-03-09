@@ -1,75 +1,14 @@
-```java
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Stack;
 
-public class PalindromeCheckerApp {
+interface PalindromeStrategy {
+    boolean checkPalindrome(String word);
+}
 
-    static class Node {
-        char data;
-        Node next;
+class StackStrategy implements PalindromeStrategy {
 
-        Node(char data) {
-            this.data = data;
-            this.next = null;
-        }
-    }
-
-    public static void checkPalindromeBruteForce(String word) {
-        boolean isPalindrome = true;
-        int length = word.length();
-
-        for (int i = 0; i < length / 2; i++) {
-            if (word.charAt(i) != word.charAt(length - 1 - i)) {
-                isPalindrome = false;
-                break;
-            }
-        }
-
-        if (isPalindrome) {
-            System.out.println(word + " is a Palindrome (Brute Force)");
-        } else {
-            System.out.println(word + " is not a Palindrome (Brute Force)");
-        }
-    }
-
-    public static void checkPalindromeByReverse(String word) {
-        String reversed = "";
-        int length = word.length();
-
-        for (int i = length - 1; i >= 0; i--) {
-            reversed = reversed + word.charAt(i);
-        }
-
-        if (word.equals(reversed)) {
-            System.out.println(word + " is a Palindrome (String Reverse)");
-        } else {
-            System.out.println(word + " is not a Palindrome (String Reverse)");
-        }
-    }
-
-    public static void checkPalindromeCharArray(String word) {
-        char[] chars = word.toCharArray();
-        boolean isPalindrome = true;
-        int length = chars.length;
-
-        for (int i = 0; i < length / 2; i++) {
-            if (chars[i] != chars[length - 1 - i]) {
-                isPalindrome = false;
-                break;
-            }
-        }
-
-        if (isPalindrome) {
-            System.out.println(word + " is a Palindrome (Char Array)");
-        } else {
-            System.out.println(word + " is not a Palindrome (Char Array)");
-        }
-    }
-
-    public static void checkPalindromeStack(String word) {
+    public boolean checkPalindrome(String word) {
         Stack<Character> stack = new Stack<>();
 
         for (char c : word.toCharArray()) {
@@ -81,170 +20,64 @@ public class PalindromeCheckerApp {
             reversed = reversed + stack.pop();
         }
 
-        if (word.equals(reversed)) {
-            System.out.println(word + " is a Palindrome (Stack)");
-        } else {
-            System.out.println(word + " is not a Palindrome (Stack)");
-        }
+        return word.equals(reversed);
     }
+}
 
-    public static void checkPalindromeQueueStack(String word) {
-        Stack<Character> stack = new Stack<>();
-        Queue<Character> queue = new LinkedList<>();
+class DequeStrategy implements PalindromeStrategy {
 
-        for (char c : word.toCharArray()) {
-            stack.push(c);
-            queue.add(c);
-        }
-
-        boolean isPalindrome = true;
-
-        while (!stack.isEmpty()) {
-            if (stack.pop() != queue.poll()) {
-                isPalindrome = false;
-                break;
-            }
-        }
-
-        if (isPalindrome) {
-            System.out.println(word + " is a Palindrome (Queue + Stack)");
-        } else {
-            System.out.println(word + " is not a Palindrome (Queue + Stack)");
-        }
-    }
-
-    public static void checkPalindromeDeque(String word) {
+    public boolean checkPalindrome(String word) {
         Deque<Character> deque = new ArrayDeque<>();
 
         for (char c : word.toCharArray()) {
             deque.addLast(c);
         }
 
-        boolean isPalindrome = true;
-
         while (deque.size() > 1) {
             if (deque.pollFirst() != deque.pollLast()) {
-                isPalindrome = false;
-                break;
+                return false;
             }
         }
 
-        if (isPalindrome) {
-            System.out.println(word + " is a Palindrome (Deque)");
-        } else {
-            System.out.println(word + " is not a Palindrome (Deque)");
-        }
-    }
-
-    public static void checkPalindromeLinkedList(String word) {
-        Node head = null;
-        Node tail = null;
-
-        for (char c : word.toCharArray()) {
-            Node newNode = new Node(c);
-            if (head == null) {
-                head = newNode;
-                tail = newNode;
-            } else {
-                tail.next = newNode;
-                tail = newNode;
-            }
-        }
-
-        Node slow = head;
-        Node fast = head;
-
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-
-        Node prev = null;
-        Node current = slow;
-
-        while (current != null) {
-            Node next = current.next;
-            current.next = prev;
-            prev = current;
-            current = next;
-        }
-
-        Node firstHalf = head;
-        Node secondHalf = prev;
-
-        boolean isPalindrome = true;
-
-        while (secondHalf != null) {
-            if (firstHalf.data != secondHalf.data) {
-                isPalindrome = false;
-                break;
-            }
-            firstHalf = firstHalf.next;
-            secondHalf = secondHalf.next;
-        }
-
-        if (isPalindrome) {
-            System.out.println(word + " is a Palindrome (Linked List)");
-        } else {
-            System.out.println(word + " is not a Palindrome (Linked List)");
-        }
-    }
-
-    public static boolean recursiveCheck(String word, int start, int end) {
-        if (start >= end) {
-            return true;
-        }
-
-        if (word.charAt(start) != word.charAt(end)) {
-            return false;
-        }
-
-        return recursiveCheck(word, start + 1, end - 1);
-    }
-
-    public static void checkPalindromeRecursive(String word) {
-        boolean isPalindrome = recursiveCheck(word, 0, word.length() - 1);
-
-        if (isPalindrome) {
-            System.out.println(word + " is a Palindrome (Recursion)");
-        } else {
-            System.out.println(word + " is not a Palindrome (Recursion)");
-        }
-    }
-
-    public static void checkPalindromeIgnoreCaseSpace(String word) {
-        String normalized = word.replaceAll("\\s+", "").toLowerCase();
-
-        boolean isPalindrome = true;
-        int length = normalized.length();
-
-        for (int i = 0; i < length / 2; i++) {
-            if (normalized.charAt(i) != normalized.charAt(length - 1 - i)) {
-                isPalindrome = false;
-                break;
-            }
-        }
-
-        if (isPalindrome) {
-            System.out.println(word + " is a Palindrome (Case-Insensitive & Space-Ignored)");
-        } else {
-            System.out.println(word + " is not a Palindrome (Case-Insensitive & Space-Ignored)");
-        }
-    }
-
-    public static void main(String[] args) {
-        String word = "madam";
-        String phrase = "A man a plan a canal Panama";
-
-        checkPalindromeBruteForce(word);
-        checkPalindromeByReverse(word);
-        checkPalindromeCharArray(word);
-        checkPalindromeStack(word);
-        checkPalindromeQueueStack(word);
-        checkPalindromeDeque(word);
-        checkPalindromeLinkedList(word);
-        checkPalindromeRecursive(word);
-        checkPalindromeIgnoreCaseSpace(phrase);
+        return true;
     }
 }
-```
+
+class PalindromeChecker {
+
+    private PalindromeStrategy strategy;
+
+    public PalindromeChecker(PalindromeStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public boolean check(String word) {
+        return strategy.checkPalindrome(word);
+    }
+}
+
+public class UseCase12PalindromeCheckerApp {
+
+    public static void main(String[] args) {
+
+        String word = "madam";
+
+        PalindromeChecker checker1 = new PalindromeChecker(new StackStrategy());
+        boolean result1 = checker1.check(word);
+
+        if (result1) {
+            System.out.println(word + " is a Palindrome (Stack Strategy)");
+        } else {
+            System.out.println(word + " is not a Palindrome (Stack Strategy)");
+        }
+
+        PalindromeChecker checker2 = new PalindromeChecker(new DequeStrategy());
+        boolean result2 = checker2.check(word);
+
+        if (result2) {
+            System.out.println(word + " is a Palindrome (Deque Strategy)");
+        } else {
+            System.out.println(word + " is not a Palindrome (Deque Strategy)");
+        }
+    }
+}
