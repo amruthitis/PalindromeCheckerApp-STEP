@@ -1,3 +1,4 @@
+```java
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -6,7 +7,16 @@ import java.util.Stack;
 
 public class PalindromeCheckerApp {
 
-    // UC2: Brute Force Method
+    static class Node {
+        char data;
+        Node next;
+
+        Node(char data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
+
     public static void checkPalindromeBruteForce(String word) {
         boolean isPalindrome = true;
         int length = word.length();
@@ -25,7 +35,6 @@ public class PalindromeCheckerApp {
         }
     }
 
-    // UC3: String Reverse Method
     public static void checkPalindromeByReverse(String word) {
         String reversed = "";
         int length = word.length();
@@ -41,7 +50,6 @@ public class PalindromeCheckerApp {
         }
     }
 
-    // UC4: Character Array Based Palindrome Check
     public static void checkPalindromeCharArray(String word) {
         char[] chars = word.toCharArray();
         boolean isPalindrome = true;
@@ -61,16 +69,13 @@ public class PalindromeCheckerApp {
         }
     }
 
-    // UC5: Stack Based Palindrome Checker
     public static void checkPalindromeStack(String word) {
         Stack<Character> stack = new Stack<>();
 
-        // Push all characters onto the stack
         for (char c : word.toCharArray()) {
             stack.push(c);
         }
 
-        // Pop characters to build reversed string
         String reversed = "";
         while (!stack.isEmpty()) {
             reversed = reversed + stack.pop();
@@ -83,20 +88,17 @@ public class PalindromeCheckerApp {
         }
     }
 
-    // UC6: Queue + Stack Based Palindrome Check
     public static void checkPalindromeQueueStack(String word) {
         Stack<Character> stack = new Stack<>();
         Queue<Character> queue = new LinkedList<>();
 
-        // Push and enqueue all characters
         for (char c : word.toCharArray()) {
-            stack.push(c);   // Stack  → LIFO → gives reverse order
-            queue.add(c);    // Queue  → FIFO → gives original order
+            stack.push(c);
+            queue.add(c);
         }
 
         boolean isPalindrome = true;
 
-        // Compare stack (reverse) with queue (original)
         while (!stack.isEmpty()) {
             if (stack.pop() != queue.poll()) {
                 isPalindrome = false;
@@ -111,18 +113,15 @@ public class PalindromeCheckerApp {
         }
     }
 
-    // UC7: Deque Based Optimized Palindrome Checker
     public static void checkPalindromeDeque(String word) {
         Deque<Character> deque = new ArrayDeque<>();
 
-        // Add all characters to deque
         for (char c : word.toCharArray()) {
             deque.addLast(c);
         }
 
         boolean isPalindrome = true;
 
-        // Compare front and back simultaneously
         while (deque.size() > 1) {
             if (deque.pollFirst() != deque.pollLast()) {
                 isPalindrome = false;
@@ -137,6 +136,60 @@ public class PalindromeCheckerApp {
         }
     }
 
+    public static void checkPalindromeLinkedList(String word) {
+        Node head = null;
+        Node tail = null;
+
+        for (char c : word.toCharArray()) {
+            Node newNode = new Node(c);
+            if (head == null) {
+                head = newNode;
+                tail = newNode;
+            } else {
+                tail.next = newNode;
+                tail = newNode;
+            }
+        }
+
+        Node slow = head;
+        Node fast = head;
+
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        Node prev = null;
+        Node current = slow;
+
+        while (current != null) {
+            Node next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+
+        Node firstHalf = head;
+        Node secondHalf = prev;
+
+        boolean isPalindrome = true;
+
+        while (secondHalf != null) {
+            if (firstHalf.data != secondHalf.data) {
+                isPalindrome = false;
+                break;
+            }
+            firstHalf = firstHalf.next;
+            secondHalf = secondHalf.next;
+        }
+
+        if (isPalindrome) {
+            System.out.println(word + " is a Palindrome (Linked List)");
+        } else {
+            System.out.println(word + " is not a Palindrome (Linked List)");
+        }
+    }
+
     public static void main(String[] args) {
         String word = "madam";
 
@@ -146,5 +199,7 @@ public class PalindromeCheckerApp {
         checkPalindromeStack(word);
         checkPalindromeQueueStack(word);
         checkPalindromeDeque(word);
+        checkPalindromeLinkedList(word);
     }
 }
+```
